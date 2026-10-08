@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ thống Đánh giá CV Tự động</title>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Đổi v=7 để ép trình duyệt xóa cache cũ -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=7">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Hệ thống Đánh giá CV Tự động</h1>
+            <p class="subtitle">Phân tích đa luồng và Bảng xếp hạng ứng viên tiềm năng</p>
+        </header>
+
+        <main>
+            <form action="/" method="POST" enctype="multipart/form-data" class="modern-form" id="uploadForm">
+                <div class="form-group">
+                    <label for="jd_skills">Yêu cầu tuyển dụng (JD):</label>
+                    <textarea name="jd_skills" id="jd_skills" rows="3" placeholder="Ví dụ: Python, SQL, C#, 1 năm kinh nghiệm...">{{ jd_skills if jd_skills else '' }}</textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="cv_files">Tải lên CV (Có thể chọn 1 hoặc nhiều file PDF cùng lúc):</label>
+                    <input type="file" name="cv_files" id="cv_files" accept=".pdf" multiple required class="file-input">
+                    <small style="color: #65676b; margin-top: 5px; display: block;">* Giữ phím Ctrl hoặc kéo chuột để chọn nhiều CV nếu muốn so sánh, xếp hạng.</small>
+                </div>
+
+                <button type="submit" class="btn-submit" id="submitBtn">Tiến hành Phân tích</button>
+            </form>
+
+            <!-- KHU VỰC HIỂN THỊ KẾT QUẢ (PHỤ THUỘC SỐ LƯỢNG CV) -->
+            {% if batch_results %}
+                {% if batch_results|length > 1 %}
+                    <!-- GIAO DIỆN 1: BẢNG XẾP HẠNG (NẾU > 1 CV) -->
+                    <div class="result-section">
+                        <div class="result-header">
+                            <h2>🏆 Bảng xếp hạng Ứng viên ({{ batch_results|length }} hồ sơ)</h2>
+                        </div>
+
+                        <div class="leaderboard">
+                            {% for res in batch_results %}
+                            <div class="candidate-card {% if loop.index == 1 %}top-1{% elif loop.index == 2 %}top-2{% elif loop.index == 3 %}top-3{% endif %}">
+                                <div class="rank-badge">
+                                    {% if loop.index == 1 %}🥇 Top 1
+                                    {% elif loop.index == 2 %}🥈 Top 2
+                                    {% elif loop.index == 3 %}🥉 Top 3
+                                    {% else %} #{{ loop.index }} {% endif %}
+                                </div>
+
+                                <div class="candidate-info">
+                                    <h3 class="file-title">{{ res.name }}</h3>
+                                    <div class="skills-preview">
+                                        <span class="found-text">Đã có:
+                                            {% for s in res.found_skills %} <span class="mini-tag green-tag">{{ s }}</span> {% endfor %}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="candidate-score">
+                                    <div class="score-circle {% if res.match_score >= 50 %}high-match{% else %}low-match{% endif %}">
+                                        {{ res.match_score }}%
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% else %}
+                    <!-- GIAO DIỆN 2: PHÂN TÍCH CHI TIẾT (NẾU CHỈ CÓ 1 CV) -->
+                    <div class="single-result-section">
+                        <div class="single-header">
+                            <h2>Kết quả đánh giá: <span>{{ batch_results[0].name }}</span></h2>
+                            <div class="score-badge {% if batch_results[0].match_score >= 50 %}score-pass{% else %}score-fail{% endif %}">
+                                Độ phù hợp: {{ batch_results[0].match_score }}%
+                            </div>
+                        </div>
+
+                        <div class="skills-grid">
+                            <div class="skill-card card-success">
+                                <h3>✅ Kỹ năng đáp ứng</h3>
+                                <div class="tag-list">
+                                    {% for skill in batch_results[0].found_skills %}
+                                        <span class="tag tag-green">{{ skill }}</span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                            <div class="skill-card card-danger">
+                                <h3>❌ Kỹ năng còn thiếu</h3>
+                                <div class="tag-list">
+                                    {% for skill in batch_results[0].missing_skills %}
+                                        <span class="tag tag-red">{{ skill }}</span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endif %}
+
+            <!-- LỊCH SỬ DỮ LIỆU -->
+            {% if history %}
+            <div class="history-section">
+                <div class="history-header">
+                    <h3>Cơ sở dữ liệu Ứng viên</h3>
+                    <a href="/export" class="btn-export">Xuất Excel toàn bộ</a>
+                </div>
+
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Tên CV</th>
+                            <th>Mức độ</th>
+                            <th>Kỹ năng ghi nhận</th>
+                            <th style="text-align: center;">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in history %}
+                        <tr>
+                            <td class="file-name">{{ row[1] }}</td>
+                            <td class="{% if row[3] >= 50 %}text-green{% else %}text-red{% endif %}">
+                                <strong>{{ row[3] }}%</strong>
+                            </td>
+                            <td class="skills-text">{{ row[4] }}</td>
+                            <td style="text-align: center;">
+                                <div style="display: flex; justify-content: center; gap: 8px;">
+                                    <a href="/export?id={{ row[0] }}" class="link-export">Tải về</a>
+                                    <a href="/delete/{{ row[0] }}" class="link-delete" onclick="return confirm('Bạn có chắc chắn muốn xóa CV này khỏi Cơ sở dữ liệu không?');">Xóa</a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+        </main>
+    </div>
+
+    <!-- Script tạo hiệu ứng chờ khi phân tích nhiều file -->
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', function() {
+            var btn = document.getElementById('submitBtn');
+            btn.innerHTML = '⏳ Hệ thống đang quét tự động...';
+            btn.style.opacity = '0.7';
+            btn.style.cursor = 'wait';
+        });
+    </script>
+</body>
+</html>

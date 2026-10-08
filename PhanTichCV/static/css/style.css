@@ -1,0 +1,74 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Be Vietnam Pro', sans-serif; background-color: #f0f2f5; color: #1c1e21; line-height: 1.5; padding: 40px 20px; }
+.container { max-width: 950px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08); padding: 40px; }
+
+header { text-align: center; margin-bottom: 35px; border-bottom: 1px solid #e4e6eb; padding-bottom: 25px; }
+header h1 { color: #1877f2; font-size: 26px; font-weight: 700; }
+.subtitle { color: #65676b; font-size: 15px; margin-top: 8px; }
+
+.form-group { margin-bottom: 20px; }
+label { display: block; font-weight: 600; color: #050505; margin-bottom: 8px; font-size: 14px; }
+textarea, .file-input { width: 100%; padding: 12px 15px; border: 1px solid #ccd0d5; border-radius: 8px; font-family: 'Be Vietnam Pro', sans-serif; font-size: 15px; transition: 0.2s; }
+textarea:focus { outline: none; border-color: #1877f2; box-shadow: 0 0 0 2px rgba(24, 119, 242, 0.2); }
+.file-input { background-color: #f7f8fa; cursor: pointer; }
+
+.btn-submit { background-color: #1877f2; color: white; border: none; padding: 14px; border-radius: 8px; font-weight: 600; font-size: 16px; width: 100%; cursor: pointer; transition: 0.2s; }
+.btn-submit:hover { background-color: #166fe5; }
+
+/* BẢNG XẾP HẠNG (Nhiều CV) */
+.result-section { margin-top: 40px; padding: 30px; border: 1px solid #e4e6eb; border-radius: 12px; background-color: #f8f9fa; }
+.result-header h2 { font-size: 20px; font-weight: 700; color: #050505; margin-bottom: 20px; text-align: center; }
+
+.leaderboard { display: flex; flex-direction: column; gap: 15px; }
+.candidate-card { display: flex; align-items: center; justify-content: space-between; background: #fff; padding: 15px 20px; border-radius: 10px; border: 1px solid #e4e6eb; box-shadow: 0 1px 3px rgba(0,0,0,0.05); transition: 0.2s; }
+.candidate-card:hover { transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+.top-1 { border: 2px solid #f1c40f; background: #fffcf0; }
+.top-2 { border: 2px solid #bdc3c7; background: #f8f9fa; }
+.top-3 { border: 2px solid #cd7f32; background: #fff8f3; }
+
+.rank-badge { font-weight: 700; font-size: 16px; width: 80px; color: #495057; }
+.candidate-info { flex: 1; padding: 0 15px; }
+.file-title { font-size: 16px; font-weight: 600; color: #1877f2; margin-bottom: 5px; }
+.mini-tag { display: inline-block; padding: 3px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; margin: 2px 4px 0 0; }
+.green-tag { background-color: #d4edda; color: #155724; }
+.score-circle { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px; color: #fff; }
+.high-match { background-color: #31a24c; }
+.low-match { background-color: #e41e3f; }
+
+/* KẾT QUẢ ĐƠN LẺ (1 CV) */
+.single-result-section { margin-top: 40px; padding: 25px; border: 1px solid #e4e6eb; border-radius: 10px; background-color: #fafbfc; }
+.single-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.single-header h2 { font-size: 18px; font-weight: 600; color: #050505; }
+.single-header span { color: #1877f2; }
+.score-badge { padding: 8px 16px; border-radius: 6px; font-weight: 700; font-size: 16px; color: #fff; }
+.score-pass { background-color: #31a24c; }
+.score-fail { background-color: #e41e3f; }
+
+.skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.skill-card { padding: 20px; border-radius: 8px; }
+.card-success { background-color: #eaf6ec; border: 1px solid #c3e6cb; }
+.card-danger { background-color: #fce8eb; border: 1px solid #f5c6cb; }
+.skill-card h3 { font-size: 15px; margin-bottom: 12px; color: #050505; }
+.tag { display: inline-block; padding: 6px 12px; margin: 0 6px 6px 0; border-radius: 6px; font-size: 13px; font-weight: 600; }
+.tag-green { background-color: #d4edda; color: #155724; }
+.tag-red { background-color: #f8d7da; color: #721c24; }
+
+/* BẢNG DATABASE LỊCH SỬ */
+.history-section { margin-top: 50px; }
+.history-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.history-header h3 { font-size: 18px; color: #050505; }
+.btn-export { background-color: #31a24c; color: white; padding: 10px 15px; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 14px; transition: 0.2s; }
+.btn-export:hover { background-color: #2b9244; }
+
+.data-table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+.data-table th { background-color: #f0f2f5; padding: 14px; text-align: left; font-weight: 600; font-size: 14px; color: #65676b; border-bottom: 2px solid #ccd0d5; }
+.data-table td { padding: 15px 14px; border-bottom: 1px solid #e4e6eb; font-size: 14px; }
+.text-green { color: #31a24c; }
+.text-red { color: #e41e3f; }
+
+/* Các nút chức năng (Tải về / Xóa) */
+.link-export { color: #1877f2; text-decoration: none; font-weight: 600; font-size: 13px; padding: 6px 10px; background: #e7f3ff; border-radius: 4px; transition: 0.2s; }
+.link-export:hover { background: #dbeafe; }
+
+.link-delete { color: #e41e3f; text-decoration: none; font-weight: 600; font-size: 13px; padding: 6px 10px; background: #fce8eb; border-radius: 4px; transition: 0.2s; }
+.link-delete:hover { background: #fbd5d9; }
